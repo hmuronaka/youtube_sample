@@ -17,6 +17,16 @@ YOUTUBE_API_VERSION = "v3"
 def get_youtube():
   return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 
+def get_caption(id, tfmt):
+  pp = pprint.PrettyPrinter(indent=4)
+  y = get_youtube()
+  result = y.captions().download(
+    id=id,
+    tfmt=tfmt
+  ).execute()
+  pp.pprint(result)
+ 
+
 def get_captions(id):
   pp = pprint.PrettyPrinter(indent=4)
   y = get_youtube()
@@ -76,11 +86,13 @@ if __name__ == "__main__":
   argparser.add_argument("--q", help="Search term", default="UF8uR6Z6KLc")
   argparser.add_argument("--max-results", help="Max results", default=25)
   argparser.add_argument("--part", help="part index", default=1)
+  argparser.add_argument("--tfmt", help="srt, ttml...", default="srt")
   args = argparser.parse_args()
 
   try:
     #youtube_search(args)
-    # get_video(args.q, int(args.part))
+    #get_video(args.q, int(args.part))
     #get_captions(args.q)
+    get_caption(args.q, args.tfmt)
   except HttpError, e:
     print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
