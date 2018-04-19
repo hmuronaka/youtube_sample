@@ -17,7 +17,7 @@ YOUTUBE_API_VERSION = "v3"
 def get_youtube():
   return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 
-def get_caption(id):
+def get_captions(id):
   pp = pprint.PrettyPrinter(indent=4)
   y = get_youtube()
   result = y.captions().list(
@@ -81,6 +81,6 @@ if __name__ == "__main__":
   try:
     #youtube_search(args)
     # get_video(args.q, int(args.part))
-    get_caption(args.q)
+    #get_captions(args.q)
   except HttpError, e:
     print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
