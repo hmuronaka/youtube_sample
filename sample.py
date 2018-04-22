@@ -2,27 +2,9 @@
 
 import os
 import pprint
-from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
-
-
-# Set DEVELOPER_KEY to the API key value from the APIs & auth > Registered apps
-# tab of
-#   https://cloud.google.com/console
-# Please ensure that you have enabled the YouTube Data API for your project.
-DEVELOPER_KEY = None
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
-
-def developer_key():
-  global DEVELOPER_KEY 
-  if DEVELOPER_KEY is None:
-    DEVELOPER_KEY = os.environ['YOUTUBE_SAMPLE_DEVELOPER_KEY']
-  return DEVELOPER_KEY  
-
-def get_youtube():
-  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=developer_key())
+from get_youtube import authenticated_youtube_developer_key, authenticated_youtube_oauth, get_youtube
 
 def get_caption(id, tfmt):
   pp = pprint.PrettyPrinter(indent=4)
@@ -96,9 +78,10 @@ if __name__ == "__main__":
   args = argparser.parse_args()
 
   try:
-    #youtube_search(args)
+    authenticated_youtube_developer_key()  
+    youtube_search(args)
     #get_video(args.q, int(args.part))
     #get_captions(args.q)
-    get_caption(args.q, args.tfmt)
+    #get_caption(args.q, args.tfmt)
   except HttpError, e:
     print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
