@@ -72,16 +72,24 @@ def youtube_search(options):
 
 if __name__ == "__main__":
   argparser.add_argument("--q", help="Search term", default="UF8uR6Z6KLc")
+  argparser.add_argument("--cmd", help="Search term", default="search")
   argparser.add_argument("--max-results", help="Max results", default=25)
   argparser.add_argument("--part", help="part index", default=1)
-  argparser.add_argument("--tfmt", help="srt, ttml...", default="srt")
+  argparser.add_argument("--tfmt", help="srt, ttml...", default="ttml")
+  argparser.add_argument("--oauth", help="1: developerkey, 0:oauth", default=0)
   args = argparser.parse_args()
 
+  actions = {
+    'search': (lambda args: youtube_search(args)),
+    'video': (lambda args: get_video(args.q, int(args.part))),
+    'captions': (lambda args: get_captions(args.q)),
+    'caption': (lambda args: get_caption(args.q, args.tfmt))
+  } 
   try:
-    authenticated_youtube_developer_key()  
-    youtube_search(args)
-    #get_video(args.q, int(args.part))
-    #get_captions(args.q)
-    #get_caption(args.q, args.tfmt)
+    if int(args.oauth) == 1:
+      authenticated_youtube_oauth(args)
+    else:
+      authenticated_youtube_developer_key()  
+    actions[args.cmd](args)
   except HttpError, e:
     print "An HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
