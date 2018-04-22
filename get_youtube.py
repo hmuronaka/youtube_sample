@@ -47,7 +47,12 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 """ % os.path.abspath(os.path.join(os.path.dirname(__file__),
                                    CLIENT_SECRETS_FILE))
 
-def authenticated_youtube(args):
+def authenticated_youtube_developer_key():
+  global YOUTUBE
+  developer_key = os.environ['YOUTUBE_SAMPLE_DEVELOPER_KEY']
+  YOUTUBE = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=developer_key)
+
+def authenticated_youtube_oauth(args):
   global YOUTUBE
   flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
     scope=YOUTUBE_READ_WRITE_SCOPE,
