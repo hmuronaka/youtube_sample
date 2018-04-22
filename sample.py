@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import os
 import pprint
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -10,12 +11,18 @@ from oauth2client.tools import argparser
 # tab of
 #   https://cloud.google.com/console
 # Please ensure that you have enabled the YouTube Data API for your project.
-DEVELOPER_KEY = ""
+DEVELOPER_KEY = None
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
+def developer_key():
+  global DEVELOPER_KEY 
+  if DEVELOPER_KEY is None:
+    DEVELOPER_KEY = os.environ['YOUTUBE_SAMPLE_DEVELOPER_KEY']
+  return DEVELOPER_KEY  
+
 def get_youtube():
-  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
+  return build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=developer_key())
 
 def get_caption(id, tfmt):
   pp = pprint.PrettyPrinter(indent=4)
