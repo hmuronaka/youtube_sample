@@ -56,8 +56,7 @@ def get_video(id, partIdx):
   pp.pprint(result)
 
 def youtube_search(options):
-  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    developerKey=DEVELOPER_KEY)
+  youtube = get_youtube()
 
   # Call the search.list method to retrieve results matching the specified
   # query term.
